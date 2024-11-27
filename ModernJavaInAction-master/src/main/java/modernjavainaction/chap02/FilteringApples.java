@@ -40,6 +40,9 @@ public class FilteringApples {
       }
     });
     System.out.println(redApples2);
+
+    prettyPrintApple(inventory, new AppleFancyFormatter());
+    prettyPrintApple(inventory, new AppleSimpleFormatter());
   }
 
   public static List<Apple> filterGreenApples(List<Apple> inventory) {
@@ -50,6 +53,12 @@ public class FilteringApples {
       }
     }
     return result;
+  }
+
+  public static void prettyPrintApple(List<Apple> inventory, AppleFormatter appleFormatter) {
+    for (Apple apple : inventory) {
+      System.out.println(appleFormatter.accept(apple));
+    }
   }
 
   public static List<Apple> filterApplesByColor(List<Apple> inventory, Color color) {
@@ -127,6 +136,10 @@ public class FilteringApples {
 
   }
 
+  interface AppleFormatter {
+    String accept(Apple apple);
+  }
+
   static class AppleWeightPredicate implements ApplePredicate {
 
     @Override
@@ -151,7 +164,20 @@ public class FilteringApples {
     public boolean test(Apple apple) {
       return apple.getColor() == Color.RED && apple.getWeight() > 150;
     }
+  }
 
+  static class AppleFancyFormatter implements AppleFormatter {
+    public String accept(Apple apple) {
+      String characteristic = apple.getWeight() > 150 ? "heavy" : "light";
+      return "A " + characteristic + " " + apple.getColor() + " apple";
+    }
+  }
+
+  static class AppleSimpleFormatter implements AppleFormatter {
+    public String accept(Apple apple) {
+      String characteristic = apple.getWeight() > 150 ? "heavy" : "light";
+      return "An apple of " +  apple.getWeight() + " g";
+    }
   }
 
 }
